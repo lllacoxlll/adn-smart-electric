@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ServiceRequest {
+  id Int @id @default(autoincrement())
+  serviceRequestToken String @db.Uuid
+  street String
+  city String
+  state String
+  zipCode String
+  requestDetails String @db.Text
+  signature String? @db.Text
+  isSigned Boolean @default(false)
+
+  customerId Int
+  customer Customer @relation(fields: [customerId], references: [id])
+
+  invoice Invoice?
+
+  @@map("servicerequest")
+}
+
+model Customer {
+  id Int @id @default(autoincrement())
+  firstName String
+  lastName String
+  phone String
+  email String @unique
+
+  serviceRequests ServiceRequest[]
+
+  @@map("customer")
+}
+
+model Invoice {
+  id Int @id @default(autoincrement())
+  serviceDescription String
+  paymentStatus Status @default(NOT_PAID)
+  serviceCharge Decimal @db.Decimal(10, 2)
+
+  serviceRequestId Int @unique
+  serviceRequest ServiceRequest @relation(fields: [serviceRequestId], references: [id])
+
+  @@map("invoice")
+}
+
+enum Status {
+  PAID
+  NOT_PAID
+  PROCESSING
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  role          Role      @default(EMPLOYEE)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@map("user")
+}
+
+enum Role {
+  ADMIN
+  EMPLOYEE
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@map("verification")
+}
