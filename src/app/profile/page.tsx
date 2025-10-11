@@ -12,6 +12,17 @@ export default async function Page() {
   })
 
   if (!session) redirect('/auth/login')
+  
+  // const FULL_POST_ACCESS = await auth.api.userHasPermission({
+  //   body: {
+  //     userId: session.user.id,
+  //     permissions: {
+  //       customer: ['update', 'delete'],
+  //       servicerequest: ['update', 'delete'],
+  //       invoice: ['update', 'delete'],
+  //     },
+  //   },
+  // })
 
   return (
     <div className="px-8 py-16 container mx-auto max-w-screen-lg space-y-8">
@@ -30,9 +41,15 @@ export default async function Page() {
         <SignoutButton />
       </div>
 
-      <pre className="text-sm overflow-clip">
-        {JSON.stringify(session, null, 2)}
-      </pre>
+      <div className="text-2xl font-bold">Permissions</div>
+
+      <div className="space-x-4">
+        <Button size="sm" asChild>
+          <Link href="/admin/customers">MANAGE CUSTOMERS</Link>
+        </Button>
+      </div>
+
+      <pre className="text-sm overflow-clip">{JSON.stringify(session, null, 2)}</pre>
     </div>
   )
 }

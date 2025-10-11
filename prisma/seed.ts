@@ -1,6 +1,6 @@
-import { auth } from '@/lib/auth'
-import prisma from '@/lib/prisma'
-import { Role } from '@/generated/prisma/client'
+import { auth } from '../src/lib/auth'
+import prisma from '../src/lib/prisma'
+import { Role } from '../src/generated/prisma/client'
 
 async function main() {
   const existingAdmin = await prisma.user.findUnique({
@@ -8,7 +8,7 @@ async function main() {
   })
 
   if (existingAdmin) {
-    if (existingAdmin.role === "EMPLOYEE") {
+    if (existingAdmin.role === 'EMPLOYEE') {
       await prisma.user.update({
         where: {
           email: process.env.ADMIN_EMAIL!,
@@ -18,20 +18,23 @@ async function main() {
         },
       })
     }
-
-  }
-  else {
+  } else {
     try {
       const res = await auth.api.signUpEmail({
         body: {
           name: process.env.ADMIN_NAME!,
           email: process.env.ADMIN_EMAIL!,
           password: process.env.ADMIN_PASSWORD!,
-          role: "ADMIN"
         },
       })
 
+      await prisma.user.update({
+        where: { email: process.env.ADMIN_EMAIL! },
+        data: { role: Role.ADMIN },
+      })
+
       console.log('Sign up successful:', res)
+
     } catch (e) {
       console.log('Sign up failed:', e)
     }

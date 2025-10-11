@@ -41,6 +41,14 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Added the below */
+  --animate-float: float 1s linear;
+
+  @keyframes float {
+    0% { transform: translateX(-20%); opacity: '0'; }
+    100% { transform: translateX(0); opacity: '1'; }
+  }
 }
 
 :root {
