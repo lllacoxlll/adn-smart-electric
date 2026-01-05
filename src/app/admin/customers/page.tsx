@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { DeleteEntityButton } from '@/components/delete-user-button'
+import { DeleteEntityButton } from '@/components/delete-entity-button'
 
 export default async function Page() {
   const session = await auth.api.getSession({

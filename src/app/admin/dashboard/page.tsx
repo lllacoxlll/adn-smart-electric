@@ -1,5 +1,5 @@
 import { CreateUserForm } from '@/components/create-new-user'
-import { DeleteEntityButton, PlaceHolderDeleteEntityButton } from '@/components/delete-user-button'
+import { DeleteEntityButton, PlaceHolderDeleteEntityButton } from '@/components/delete-entity-button'
 import { ReturnButton } from '@/components/return-button'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
@@ -32,7 +32,7 @@ export default async function Page() {
     headers: headersList,
     query: {
       sortBy: 'name',
-    }
+    },
   })
 
   return (
