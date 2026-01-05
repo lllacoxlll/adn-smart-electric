@@ -38,11 +38,12 @@ export const ContactUsCard = () => {
       const result = await response.json()
 
       toast.success('Form submitted successfully', result)
-      console.log(result)
     } catch (error) {
-      toast.error('Error submitting form')
-      console.log(error)
+      if (error instanceof Error) {
+        toast.error(error.message)
+      }
     }
+    form.reset()
   }
 
   return (

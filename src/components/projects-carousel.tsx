@@ -7,8 +7,8 @@ import Autoplay from 'embla-carousel-autoplay'
 import Image from 'next/image'
 
 interface ImageData {
-  src: string,
-  alt: string,
+  src: string
+  alt: string
 }
 
 const images: ImageData[] = [
@@ -17,7 +17,7 @@ const images: ImageData[] = [
   { src: '/circuit-breaker.jpeg', alt: 'circuit breaker' },
   { src: '/battery.jpeg', alt: 'indoor battery' },
   { src: '/hvac.jpeg', alt: 'hvac unit' },
-  { src: '/electrical-panel.jpeg', alt: 'electrical panel' }
+  { src: '/electrical-panel.jpeg', alt: 'electrical panel' },
 ]
 
 export function ProjectsCarousel() {
@@ -55,26 +55,19 @@ export function ProjectsCarousel() {
     >
       <CarouselContent>
         {images.map((image, index) => (
-          <CarouselItem
-            key={index}
-            className="md:basis-1/3 lg:basis-1/3"
-          >
+          <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/3">
             <div className="p-1">
-              <Card>
+              <Card className="bg-white/10 border-none inset-shadow-sm/20 inset-shadow-white shadow-lg">
                 <CardContent className="relative flex aspect-square items-center justify-center p-6">
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                  />
+                  <Image src={image.src} alt={image.alt} fill />
                 </CardContent>
               </Card>
             </div>
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      {/* <CarouselPrevious /> */}
+      {/* <CarouselNext /> */}
     </Carousel>
   )
 }

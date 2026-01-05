@@ -1,5 +1,5 @@
 import { CreateUserForm } from '@/components/create-new-user'
-import { DeleteUserButton, PlaceHolderDeleteUserButton } from '@/components/delete-user-button'
+import { DeleteEntityButton, PlaceHolderDeleteEntityButton } from '@/components/delete-user-button'
 import { ReturnButton } from '@/components/return-button'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
@@ -16,7 +16,7 @@ export default async function Page() {
 
   if (session.user.role !== 'ADMIN') {
     return (
-      <div className="px-8 py-16 container mx-auto max-w-screen-lg space-y-8">
+      <div className="px-8 py-16 container mx-auto max-w-5xl space-y-8">
         <div className="space-y-8">
           <ReturnButton href="/profile" label="Profile" />
 
@@ -36,7 +36,7 @@ export default async function Page() {
   })
 
   return (
-    <div className="px-8 py-16 container mx-auto max-w-screen-lg space-y-8">
+    <div className="px-8 py-16 container mx-auto max-w-5xl space-y-8">
       <div className="space-y-8">
         <ReturnButton href="/profile" label="Profile" />
 
@@ -45,7 +45,7 @@ export default async function Page() {
         <p className="p-2 rounded-md text-lg bg-green-600 text-white font-bold">ACCESS GRANTED</p>
       </div>
 
-      <div className="w-full overflox-x-auto">
+      <div className="w-full overflow-x-auto">
         <table className="table-auto min-w-full whitespace-nowrap">
           <caption className="text-left text-xl font-bold mb-2">Active Employees</caption>
           <thead>
@@ -65,7 +65,7 @@ export default async function Page() {
                 <td className="px-4 py-2">{user.name}</td>
                 <td className="px-4 py-2">{user.email}</td>
                 <td className="px-4 py-2 text-center">{user.role}</td>
-                <td className="px-4 py-2 text-center">{user.role === 'EMPLOYEE' ? <DeleteUserButton userId={user.id} /> : <PlaceHolderDeleteUserButton />}</td>
+                <td className="px-4 py-2 text-center">{user.role === 'EMPLOYEE' ? <DeleteEntityButton Id={user.id} /> : <PlaceHolderDeleteEntityButton />}</td>
               </tr>
             ))}
           </tbody>

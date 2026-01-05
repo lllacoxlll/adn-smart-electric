@@ -1,22 +1,22 @@
 "use client"
 
-import { deleteUserAction } from "@/actions/delete-user.action"
+import { deleteEntityAction } from "@/actions/delete-user.action"
 import { Button } from "@/components/ui/button"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 
-interface DeleteUserButtonProps {
-  userId: string
+interface DeleteEntityButtonProps {
+  Id: string | number
 }
 
-export const DeleteUserButton = ({ userId }: DeleteUserButtonProps) => {
+export const DeleteEntityButton = ({ Id }: DeleteEntityButtonProps) => {
   const [isPending, setIsPending] = useState(false)
 
   async function handleClick() {
     setIsPending(true)
 
-    const { error } = await deleteUserAction({ userId })
+    const { error } = await deleteEntityAction({ Id })
 
     if (error) toast.error(error)
     else toast.success('User deleted successfully')
@@ -38,7 +38,7 @@ export const DeleteUserButton = ({ userId }: DeleteUserButtonProps) => {
   )
 }
 
-export const PlaceHolderDeleteUserButton = () => {
+export const PlaceHolderDeleteEntityButton = () => {
   return (
     <Button
       size="icon"

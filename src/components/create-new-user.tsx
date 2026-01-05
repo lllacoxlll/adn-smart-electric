@@ -1,55 +1,105 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from './ui/button'
+import { Input } from './ui/input'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { toast } from 'sonner'
-// import { useRouter } from 'next/navigation'
 import { createUserAction } from '@/actions/create-user.action'
+import { createEmployeeSchema, EmployeeData } from '@/lib/schemas'
 
 export const CreateUserForm = () => {
-
   const [isPending, setIsPending] = useState(false)
 
-  async function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
-    evt.preventDefault()
+  const form = useForm<EmployeeData>({
+    resolver: zodResolver(createEmployeeSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      name: '',
+    },
+  })
 
+  async function handleSubmit(data: EmployeeData) {
     setIsPending(true)
+    try {
+      const { error } = await createUserAction(data)
 
-    const formData = new FormData(evt.target as HTMLFormElement)
+      if (error) {
+        throw error
+      }
 
-    const { error } = await createUserAction(formData)
+      toast.success('New User created successfully')
 
-    if (error) {
-      toast.error(error)
       setIsPending(false)
-    } else {
-      toast.success('User created successfully')
+    } catch (error) {
+      if (typeof error === 'string') {
+        toast.error(error)
+      } else {
+        toast.error('An unknown error occurred.')
+      }
+
+      setIsPending(false)
     }
+    form.reset()
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm w-full my-20 space-y-4">
-      <fieldset>
-        <legend className="my-4 text-xl font-bold">Create New Employee</legend>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input type="email" id="email" name="email" />
-        </div>
-        <div className="my-4 space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input type="password" id="password" name="password" />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input type="text" id="name" name="name" />
-        </div>
-      </fieldset>
-
-      <Button type="submit" className="w-full" disabled={isPending}>
-        Create User
-      </Button>
-    </form>
+    <Card className="w-full max-w-sm mx-auto my-8">
+      <CardHeader>
+        <CardTitle className="text-xl">Create New User</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="employee@example.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="First Last" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button disabled={isPending} type="submit">
+              Submit
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   )
 }
