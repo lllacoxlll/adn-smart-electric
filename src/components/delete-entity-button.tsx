@@ -1,6 +1,6 @@
 "use client"
 
-import { deleteEntityAction } from "@/actions/delete-user.action"
+import { deleteEntityAction } from "@/actions/delete-entity.action"
 import { Button } from "@/components/ui/button"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
